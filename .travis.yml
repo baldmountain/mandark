@@ -2,6 +2,6 @@ language: elixir
 elixir:
   - '1.9'
 otp_release:
-  - '22'
+  - '20'
 script: ./scripts/test-firmware.sh
 script: ./scripts/test-ui.sh
