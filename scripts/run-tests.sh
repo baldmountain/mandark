@@ -3,4 +3,6 @@ set -ev
 cd firmware
 mix deps.get
 mix test
-cd ..
+cd ../ui
+mix deps.get
+mix test
