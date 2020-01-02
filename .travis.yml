@@ -3,5 +3,6 @@ elixir:
   - '1.9'
 otp_release:
   - '20'
+dist: bionic
 script: ./scripts/test-firmware.sh
 script: ./scripts/test-ui.sh
