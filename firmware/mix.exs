@@ -63,7 +63,7 @@ defmodule Firmware.MixProject do
       {:nerves_time, "~> 0.3.0"},
       {:quantum, "~> 2.3"},
       {:timex, "~> 3.6"},
-      {:jason, "~> 1.0"},
+      {:jason, "~> 1.1"},
     ]
   end
 
