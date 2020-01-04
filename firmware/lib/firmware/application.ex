@@ -35,16 +35,11 @@ defmodule Firmware.Application do
       # Children for all targets except host
       # Starts a worker by calling: Firmware.Worker.start_link(arg)
       # {Firmware.Worker, arg},
-        { Firmware.Scheduler, [] },
+        { Firmware.StartupSupervisor, [] },
     ]
   end
 
   def target() do
     Application.get_env(:firmware, :target)
-  end
-
-  def handle_cast(:check_ntp, state) do
-    IO.puts("check_ntp >>> #{NervesTime.synchronized?()}")
-    {:noreply, state}
   end
 end
