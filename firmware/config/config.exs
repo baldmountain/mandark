@@ -26,7 +26,7 @@ config :shoehorn,
 
 config :logger,
   backends: [RingLogger],
-  level: :debug
+  level: :info
 
 # Import target specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
@@ -38,6 +38,8 @@ config :nerves_time, :servers, [
     "2.pool.ntp.org",
     "3.pool.ntp.org"
   ]
+
+  config :nerves_time, earliest_time: ~N[2020-01-05 14:34:00], latest_time: ~N[2022-01-01 00:00:00]
 
 config :ui, UiWeb.Endpoint,
   url: [host: "localhost"],

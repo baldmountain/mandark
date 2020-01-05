@@ -12,7 +12,7 @@ npm rum deploy
 cd ..
 mix phx.digest
 mix test
-cd ../firmware
-mix deps.get
-mix deps.compile
-mix test
+# cd ../firmware
+# mix deps.get
+# mix deps.compile
+# mix test

@@ -6,6 +6,8 @@ defmodule Firmware.Application do
 
   use Application
 
+  @base_dir "/sys/bus/w1/devices/"
+
   def start(_type, _args) do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
@@ -30,12 +32,12 @@ defmodule Firmware.Application do
   end
 
   def children(_target) do
-    IO.puts(">>>>>>>> children(_target): #{NervesTime.synchronized?()}")
     [
       # Children for all targets except host
       # Starts a worker by calling: Firmware.Worker.start_link(arg)
       # {Firmware.Worker, arg},
         { Firmware.StartupSupervisor, [] },
+        { Firmware.NtpChecker, [] },
     ]
   end
 

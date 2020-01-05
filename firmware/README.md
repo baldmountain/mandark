@@ -30,3 +30,18 @@ To start your Nerves app:
   * Forum: https://elixirforum.com/c/nerves-forum
   * Discussion Slack elixir-lang #nerves ([Invite](https://elixir-slackin.herokuapp.com/))
   * Source: https://github.com/nerves-project/nerves
+
+## Be sure to set
+
+```bash
+export NERVES_NETWORK_KEY_MGMT="WPA-PSK"
+export NERVES_NETWORK_SSID="Mulberry Circle 2G"
+export NERVES_NETWORK_PSK=m0b1c10us
+export MIX_TARGET=rpi3
+```
+
+Build:
+
+```bash
+NERVES_APP=/root mix firmware.burn
+```

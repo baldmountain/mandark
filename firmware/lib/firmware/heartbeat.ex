@@ -2,8 +2,8 @@ defmodule Firmware.Heartbeat do
   require Logger
 
   def perform() do
-    s = "here" # Timex.now("America/New_York") |> Timex.format!("%FT%T%:z", :strftime)
-    IO.puts("<<<<< Heartbeat >>>>> - #{s}")
-    Logger.info("<<<<< Heartbeat >>>>> - #{s}")
+    s = Timex.now("America/New_York") |> Timex.format!("%FT%T%:z", :strftime)
+    Logger.info("<<<<< Heartbeat >>>>> - #{inspect(Timex.now("America/New_York"))} `#{s}` logger")
+    RingLogger.next()
   end
 end

@@ -65,7 +65,7 @@ config :nerves_network,
   regulatory_domain: "US"
 
 config :firmware, Firmware.Scheduler,
-  # timezone: "America/New_York",
+  timezone: "America/New_York",
   jobs: [
     heartbeat: [
       schedule: "* * * * *",
@@ -80,6 +80,11 @@ config :firmware, Firmware.Scheduler,
     # Runs every midnight:
     # {"@daily",         {Backup, :backup, []}}
   ]
+
+config :nerves, :firmware,
+  fwup_conf: "config/rpi3/fwup.conf"
+
+config :tzdata, :data_dir, "/dev/mmcblk0p3"
 
 # Import target specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
