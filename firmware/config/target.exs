@@ -46,7 +46,8 @@ config :nerves_network, :default,
         ssid: System.get_env("NERVES_NETWORK_SSID"),
         psk: System.get_env("NERVES_NETWORK_PSK"),
         key_mgmt: String.to_atom(key_mgmt),
-        scan_ssid: 1 #if your WiFi setup as hidden
+        # if your WiFi setup as hidden
+        scan_ssid: 1
       ]
     ]
   ],
@@ -69,8 +70,8 @@ config :firmware, Firmware.Scheduler,
   jobs: [
     heartbeat: [
       schedule: "* * * * *",
-      task: {Firmware.Heartbeat, :perform, []},
-    ],
+      task: {Firmware.Heartbeat, :perform, []}
+    ]
     # Every minute
     # {"* * * * *",      {Firmware.Heartbeat, :perform, []}},
     # Every 15 minutes
@@ -81,8 +82,7 @@ config :firmware, Firmware.Scheduler,
     # {"@daily",         {Backup, :backup, []}}
   ]
 
-config :nerves, :firmware,
-  fwup_conf: "config/rpi3/fwup.conf"
+config :nerves, :firmware, fwup_conf: "config/rpi3/fwup.conf"
 
 # config :tzdata, :data_dir, "/dev/mmcblk0p3"
 config :tzdata, :autoupdate, :disabled

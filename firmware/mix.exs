@@ -62,7 +62,7 @@ defmodule Firmware.MixProject do
       # Dependencies to do stuff
       {:nerves_time, "~> 0.3.0"},
       {:quantum, "~> 2.3"},
-      {:timex, "~> 3.6"},
+      {:timex, "~> 3.6"}
     ]
   end
 

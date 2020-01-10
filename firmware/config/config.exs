@@ -33,13 +33,13 @@ config :logger,
 # Uncomment to use target specific configurations
 
 config :nerves_time, :servers, [
-    "0.pool.ntp.org",
-    "1.pool.ntp.org",
-    "2.pool.ntp.org",
-    "3.pool.ntp.org"
-  ]
+  "0.pool.ntp.org",
+  "1.pool.ntp.org",
+  "2.pool.ntp.org",
+  "3.pool.ntp.org"
+]
 
-  config :nerves_time, earliest_time: ~N[2020-01-05 14:34:00], latest_time: ~N[2022-01-01 00:00:00]
+config :nerves_time, earliest_time: ~N[2020-01-05 14:34:00], latest_time: ~N[2022-01-01 00:00:00]
 
 config :ui, UiWeb.Endpoint,
   url: [host: "localhost"],

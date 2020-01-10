@@ -19,10 +19,12 @@ defmodule Firmware.NtpChecker do
 
   defp check do
     RingLogger.next()
+
     case NervesTime.synchronized?() do
       true ->
         IO.puts("yes")
         Firmware.StartupSupervisor.start_scheduler()
+
       _ ->
         IO.puts("no")
         Process.sleep(3000)
