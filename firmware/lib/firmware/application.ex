@@ -6,8 +6,6 @@ defmodule Firmware.Application do
 
   use Application
 
-  @base_dir "/sys/bus/w1/devices/"
-
   def start(_type, _args) do
     # See https://hexdocs.pm/elixir/Supervisor.html
     # for other strategies and supported options
@@ -40,12 +38,10 @@ defmodule Firmware.Application do
       {Firmware.StartupSupervisor, []},
       {Firmware.NtpChecker, []},
       {Firmware.Sensors,
-       [
-         %{
-           temperature: 0.0,
-           relative_humidity: 0.0
-         }
-       ]}
+       %{
+         temperature: 0.0,
+         relative_humidity: 0.0
+       }}
     ]
   end
 

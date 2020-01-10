@@ -1,4 +1,6 @@
 defmodule Firmware.StartupSupervisor do
+  require Logger
+
   use DynamicSupervisor
 
   def start_link(_arg) do
@@ -10,6 +12,8 @@ defmodule Firmware.StartupSupervisor do
   end
 
   def start_scheduler do
+    Logger.info("Time synchronization finished. Starting perioodic task scheduler.")
+
     spec = %{id: Firmware.Scheduler, start: {Firmware.Scheduler, :start_link, []}}
     DynamicSupervisor.start_child(__MODULE__, spec)
   end
