@@ -55,13 +55,6 @@ config :nerves_network, :default,
     ipv4_address_method: :dhcp
   ]
 
-# config :nerves_network, :default,
-#   wlan0: [
-#     ssid: System.get_env("Mulberry Circle 2G"),
-#     psk: System.get_env("m0b1c10us"),
-#     key_mgmt: String.to_atom(key_mgmt)
-#   ]
-
 config :nerves_network,
   regulatory_domain: "US"
 

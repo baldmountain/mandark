@@ -35,8 +35,8 @@ To start your Nerves app:
 
 ```bash
 export NERVES_NETWORK_KEY_MGMT="WPA-PSK"
-export NERVES_NETWORK_SSID="Mulberry Circle 2G"
-export NERVES_NETWORK_PSK=m0b1c10us
+export NERVES_NETWORK_SSID="a network ssd"
+export NERVES_NETWORK_PSK=secret
 export MIX_TARGET=rpi3
 ```
 
