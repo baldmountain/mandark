@@ -22,10 +22,12 @@ defmodule Firmware.NtpChecker do
 
     case NervesTime.synchronized?() do
       true ->
+        IO.puts("yes")
         Firmware.StartupSupervisor.start_scheduler()
 
       _ ->
         Process.sleep(3000)
+        IO.puts("no")
         Process.send(self(), :check_ntp, [:noconnect])
     end
   end

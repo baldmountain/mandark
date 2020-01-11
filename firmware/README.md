@@ -43,5 +43,5 @@ export MIX_TARGET=rpi3
 Build:
 
 ```bash
-NERVES_APP=/root mix firmware.burn
+mix firmware.burn
 ```
