@@ -75,7 +75,7 @@ config :firmware, Firmware.Scheduler,
     # {"@daily",         {Backup, :backup, []}}
   ]
 
-config :nerves, :firmware, fwup_conf: "config/rpi3/fwup.conf"
+# config :nerves, :firmware, fwup_conf: "config/rpi3/fwup.conf"
 
 # config :tzdata, :data_dir, "/dev/mmcblk0p3"
 config :tzdata, :autoupdate, :disabled

@@ -62,7 +62,8 @@ defmodule Firmware.MixProject do
       # Dependencies to do stuff
       {:nerves_time, "~> 0.3.0"},
       {:quantum, "~> 2.3"},
-      {:timex, "~> 3.6"}
+      {:timex, "~> 3.6"},
+      {:elixir_bme680, path: "/Users/gclements/work/elixir_bme680"}
     ]
   end
 

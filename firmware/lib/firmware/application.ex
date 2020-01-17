@@ -41,7 +41,8 @@ defmodule Firmware.Application do
        %{
          temperature: 0.0,
          relative_humidity: 0.0
-       }}
+       }},
+      {Bme280, []}
     ]
   end
 
