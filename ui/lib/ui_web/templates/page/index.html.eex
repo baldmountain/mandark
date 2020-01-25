@@ -8,6 +8,7 @@
     <h2>Resources</h2>
     <ul>
       <li><%= Timex.now("America/New_York") |> Timex.format!("%FT%T%:z", :strftime) %></li>
+      <li><%= inspect(get_measurements()) %></li>
       <li>
         <a href="https://hexdocs.pm/phoenix/overview.html">Guides &amp; Docs</a>
       </li>

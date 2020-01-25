@@ -9,16 +9,33 @@ defmodule Firmware.Sensors do
 
   @impl true
   def init(state) do
-    {:ok, state}
+    IO.puts("Starting Bme280")
+    try do
+      case Bme280.start_link() do
+        {:ok, bme280_pid} ->
+          {:ok, Map.put(state, :bme280_pid, bme280_pid)}
+        err ->
+          Logger.error("Error starting Bme280 #{inspect(err)}")
+          {:ok, state}
+      end
+    catch
+      e, v ->
+        IO.puts("Error: #{inspect(e)} value: #{inspect(v)}")
+        {:ok, state}
+    end
   end
 
   @impl true
   def handle_cast(:check_sensors, state) do
-    state =
-      state
-      |> check_temperature()
-
-    {:noreply, state}
+    try do
+      state = check_temperature(state)
+      Logger.info("Checksensor state: #{inspect(state)}")
+      {:noreply, state}
+    catch
+      e, v ->
+        IO.puts("Error: #{inspect(e)} value: #{inspect(v)}")
+        {:noreply, state}
+    end
   end
 
   @impl true
@@ -26,13 +43,12 @@ defmodule Firmware.Sensors do
     {:reply, state, state}
   end
 
-
   defp check_temperature(state) do
     Logger.info("Checking temperature")
 
-    measurement = Bme280.measure(Bme280)
+    measurement = Bme280.measure(state.bme280_pid)
     Logger.info("measurement: #{inspect(measurement)}")
 
-    state
+    Map.merge(state, Map.from_struct(measurement))
   end
 end

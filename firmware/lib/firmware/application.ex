@@ -40,9 +40,9 @@ defmodule Firmware.Application do
       {Firmware.Sensors,
        %{
          temperature: 0.0,
-         relative_humidity: 0.0
+         humidity: 0.0,
+         pressure: 0.0
        }},
-      {Bme280, []}
     ]
   end
 

@@ -13,7 +13,6 @@ defmodule Firmware.Heartbeat do
     catch
       e, v ->
         Logger.error("Error: #{inspect(e)} value: #{inspect(v)}")
-      x -> Logger.error("Excetion!!! #{inspect(x)}")
     end
 
     RingLogger.next()
