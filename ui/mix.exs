@@ -39,7 +39,8 @@ defmodule Ui.MixProject do
       {:gettext, "~> 0.11"},
       {:jason, "~> 1.1"},
       {:plug_cowboy, "~> 2.0"},
-      {:timex, "~> 3.6"}
+      {:timex, "~> 3.6"},
+      {:absinthe_plug, "~> 1.4"}
     ]
   end
 end
