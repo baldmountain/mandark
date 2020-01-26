@@ -9,7 +9,7 @@ defmodule UiWeb.PageView do
       %{
         temperature: vals.temperature * 9.0 / 5.0 + 32.0,
         humidity: vals.humidity,
-        preasure: vals.pressure * 10
+        preasure: vals.pressure * 10.0
       }
     catch
       _e, _v ->
