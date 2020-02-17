@@ -53,6 +53,8 @@ config :ui, UiWeb.Endpoint,
 
 config :phoenix, :json_library, Jason
 
+config :elixir, :time_zone_database, Tzdata.TimeZoneDatabase
+
 if Mix.target() != :host do
   import_config "target.exs"
 end

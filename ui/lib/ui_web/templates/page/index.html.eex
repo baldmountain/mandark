@@ -1,5 +1,5 @@
 <section class="phx-hero">
-  <h1>Welcome to the grow room!</h1>
+  <h3>Grow Room</h3>
 </section>
 
 <% measurements = get_measurements() %>

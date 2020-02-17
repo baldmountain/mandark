@@ -18,7 +18,7 @@ defmodule Firmware.NtpChecker do
   end
 
   defp check do
-    RingLogger.next()
+    # RingLogger.next()
 
     case NervesTime.synchronized?() do
       true ->
