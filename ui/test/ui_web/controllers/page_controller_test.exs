@@ -3,6 +3,6 @@ defmodule UiWeb.PageControllerTest do
 
   test "GET /", %{conn: conn} do
     conn = get(conn, "/")
-    assert html_response(conn, 200) =~ "Welcome to the grow room!"
+    assert html_response(conn, 200) =~ "Grow Room"
   end
 end
