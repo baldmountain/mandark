@@ -9,6 +9,7 @@ defmodule Firmware.Sensors do
 
     def from_measurement(measurement) do
       {:ok, datetime} = DateTime.now("America/New_York")
+
       %TimeBasedMeasurment{
         temperature: measurement.temperature,
         humidity: measurement.humidity,
@@ -24,27 +25,14 @@ defmodule Firmware.Sensors do
 
   @impl true
   def init(state) do
-    IO.puts("Starting Bme280")
-    try do
-      case Bme280.start_link() do
-        {:ok, bme280_pid} ->
-          {:ok, Map.put(state, :bme280_pid, bme280_pid)}
-        err ->
-          Logger.error("Error starting Bme280 #{inspect(err)}")
-          {:ok, state}
-      end
-    catch
-      e, v ->
-        IO.puts("Error: #{inspect(e)} value: #{inspect(v)}")
-        {:ok, state}
-    end
+    start_bme280(state)
   end
 
   @impl true
   def handle_cast(:check_sensors, state) do
     try do
       state = check_temperature(state)
-      # Logger.info("Checksensor state: #{inspect(state)}")
+      Logger.info("Checksensor state: #{inspect(state)}")
       {:noreply, state}
     catch
       e, v ->
@@ -58,19 +46,64 @@ defmodule Firmware.Sensors do
     {:reply, state, state}
   end
 
-  defp check_temperature(state) do
+  defp start_bme280(state) do
+    IO.puts("Starting Bme280")
+
+    try do
+      case Bme280.start_link() do
+        {:ok, bme280_pid} ->
+          {:ok, Map.put(state, :bme280_pid, bme280_pid)}
+
+        err ->
+          Logger.error("Error starting Bme280 #{inspect(err)}")
+          {:ok, state}
+      end
+    catch
+      e, v ->
+        IO.puts("Error: #{inspect(e)} value: #{inspect(v)}")
+        {:ok, state}
+    end
+  end
+
+  defp restart_bme280(state) do
+    state =
+      case Map.get(state, :bme280_pid) do
+        nil ->
+          state
+
+        pid ->
+          GenServer.cast(pid, :stop)
+          Map.delete(state, :bme280_pid)
+      end
+
+    case start_bme280(state) do
+      {:ok, state} -> state
+      _ -> state
+    end
+  end
+
+  defp check_temperature(%{bme280_pid: bme280_pid} = state) do
     Logger.info("Checking temperature")
 
-    measurement = Bme280.measure(state.bme280_pid)
-    {:ok, datetime} = DateTime.now("America/New_York")
-    later = Timex.subtract(datetime, Duration.from_hours(24))
+    case Bme280.measure(bme280_pid) do
+      %{temperature: 0.0, presure: 0.0, humidity: 0.0} ->
+        restart_bme280(state)
 
-    measurements =
-      [TimeBasedMeasurment.from_measurement(measurement) | state.measurements]
-      |> Enum.filter(fn m -> Timex.after?(m.timestamp, later) end)
+      measurement ->
+        {:ok, datetime} = DateTime.now("America/New_York")
+        later = Timex.subtract(datetime, Duration.from_hours(24))
 
-    state
-      |> Map.merge(Map.from_struct(measurement))
-      |> Map.put(:measurements, measurements)
+        measurements =
+          [TimeBasedMeasurment.from_measurement(measurement) | state.measurements]
+          |> Enum.filter(fn m -> Timex.after?(m.timestamp, later) end)
+
+        state
+        |> Map.merge(Map.from_struct(measurement))
+        |> Map.put(:measurements, measurements)
+    end
+  end
+
+  defp check_temperature(state) do
+    restart_bme280(state)
   end
 end

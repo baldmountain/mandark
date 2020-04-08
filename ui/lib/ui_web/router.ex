@@ -19,11 +19,9 @@ defmodule UiWeb.Router do
     get "/", PageController, :index
   end
 
-forward "/api", Absinthe.Plug,
-  init_opts: [schema: UiWeb.Schema]
+  forward "/api", Absinthe.Plug, init_opts: [schema: UiWeb.Schema]
 
-forward "/graphiql", Absinthe.Plug.GraphiQL,
-  init_opts: [schema: UiWeb.Schema]
+  forward "/graphiql", Absinthe.Plug.GraphiQL, init_opts: [schema: UiWeb.Schema]
 
   # Other scopes may use custom stacks.
   # scope "/api", UiWeb do

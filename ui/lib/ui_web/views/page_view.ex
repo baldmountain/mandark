@@ -6,6 +6,7 @@ defmodule UiWeb.PageView do
   def get_measurements() do
     try do
       vals = GenServer.call(Firmware.Sensors, :get_sensor_data)
+
       %{
         temperature: vals.temperature * 9.0 / 5.0 + 32.0,
         humidity: vals.humidity,

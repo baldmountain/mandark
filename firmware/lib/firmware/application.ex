@@ -43,8 +43,8 @@ defmodule Firmware.Application do
          humidity: 0.0,
          pressure: 0.0,
          # List of time coded measurments. Only the last 24 hours.
-         measurements: [],
-       }},
+         measurements: []
+       }}
     ]
   end
 

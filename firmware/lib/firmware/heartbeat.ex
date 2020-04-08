@@ -15,7 +15,7 @@ defmodule Firmware.Heartbeat do
         Logger.error("Error: #{inspect(e)} value: #{inspect(v)}")
     end
 
-    # RingLogger.next()
+    RingLogger.next()
     :ok
   end
 end
