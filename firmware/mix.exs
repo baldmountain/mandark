@@ -39,7 +39,7 @@ defmodule Firmware.MixProject do
   defp deps do
     [
       # Dependencies for all targets
-      {:nerves, "~> 1.5.0", runtime: false},
+      {:nerves, "~> 1.6.0", runtime: false},
       {:shoehorn, "~> 0.6"},
       {:ring_logger, "~> 0.6"},
       {:toolshed, "~> 0.2"},
@@ -63,7 +63,7 @@ defmodule Firmware.MixProject do
       {:nerves_time, "~> 0.3.0"},
       {:quantum, "~> 2.3"},
       {:timex, "~> 3.6"},
-      {:elixir_bme680, "~> 0.2"},
+      {:elixir_bme680, path: "/Users/gclements/work/elixir_bme680"},
       {:tzdata, "~> 1.0.3"}
     ]
   end
