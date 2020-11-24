@@ -2,16 +2,96 @@
   <h3>Grow Room</h3>
 </section>
 
-<% measurements = get_measurements() %>
+<% measurements = get_current_measurement() %>
+<% temp = (measurements.temperature - 32.0) * 5.0 / 9.0 %>
+<% svp = 610.78 * :math.exp(temp / (temp + 238.3) * 17.2694) / 1000.0 %>
 
 <section class="row">
   <article class="column">
     <h2>Resources</h2>
     <ul>
-      <li><%= Timex.now("America/New_York") |> Timex.format!("%FT%T%:z", :strftime) %></li>
-      <li>Temperature: <%= measurements.temperature %> F</li>
-      <li>Humidity: <%= measurements.humidity %>%%</li>
-      <li>Pressure: <%= measurements.preasure %> inHg</li>
+      <li><%= Timex.now("America/New_York") |> Timex.format!("%m/%d/%Y %I:%M%P", :strftime) %></li>
+      <li>Temperature: <%= Float.round(measurements.temperature, 2) %> F˚</li>
+      <li>Humidity: <%= Float.round(measurements.humidity, 2) %>%</li>
+      <li>Pressure: <%= Float.round(measurements.preasure, 2) %> inHg</li>
+      <li>Air SVP: <%= Float.round(svp, 2) %> kPa</li>
+      <li>Air VPD: <%= Float.round(svp * (1.0 - measurements.humidity / 100.0), 2) %></li>
     </ul>
   </article>
 </section>
+<section>
+  <h2>Temperature, Humidity, Pressure</h2>
+  <div id="temp_chart" />
+</section>
+<script type="text/javascript">
+(function() {
+  var data = <%= raw(get_json_measurments()) %>;
+
+  function toFarenheit(t) {
+    return t * 9.0 / 5.0 + 32.0
+  }
+
+  data.forEach(function(item) {
+    item.temperature = toFarenheit(item.temperature);
+    item.timestamp = new Date(item.timestamp);
+  });
+
+  window.onload = function() {
+    // set the dimensions and margins of the graph
+    var margin = {top: 10, right: 30, bottom: 30, left: 60},
+      width = 460 - margin.left - margin.right,
+      height = 400 - margin.top - margin.bottom;
+
+    // append the svg object to the body of the page
+    var svg = d3.select("#temp_chart")
+      .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+      .append("g")
+        .attr("transform",
+              "translate(" + margin.left + "," + margin.top + ")");
+    // Add X axis --> it is a date format
+    var x = d3.scaleTime()
+      .domain(d3.extent(data, function(d) { return d.timestamp; }))
+      .range([ 0, width ]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([
+        d3.min(data, function(d) {
+          return Math.min(d.humidity, +d.pressure, +d.temperature) - 5.0;
+        }),
+        d3.max(data, function(d) {
+          return Math.max(+d.humidity, +d.pressure, +d.temperature) + 5.0;
+        })
+      ])
+      .range([ height, 0 ]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    // temperature line
+    svg.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.timestamp) })
+        .y(function(d) { return y(d.temperature) })
+        );
+    // humidity line
+    svg.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "green")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function(d) { return x(d.timestamp) })
+        .y(function(d) { return y(d.humidity) })
+        );
+  }
+})();
+</script>

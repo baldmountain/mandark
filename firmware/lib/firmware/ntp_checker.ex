@@ -17,17 +17,25 @@ defmodule Firmware.NtpChecker do
     {:noreply, state}
   end
 
+  @impl true
+  def handle_info(:start_scheduler, state) do
+    IO.puts("time> #{Timex.now("America/New_York") |> Timex.format!("%m/%d/%Y %I:%M%P", :strftime)}")
+    Firmware.StartupSupervisor.start_scheduler()
+    |> IO.inspect(label: "starting scheduler")
+    {:noreply, state}
+  end
+
   defp check do
-    # RingLogger.next()
+    RingLogger.next()
 
     case NervesTime.synchronized?() do
       true ->
-        IO.puts("yes")
-        Firmware.StartupSupervisor.start_scheduler()
+        IO.puts("yes #{Timex.now("America/New_York") |> Timex.format!("%m/%d/%Y %I:%M%P", :strftime)}")
+        Process.send_after(self(), :start_scheduler, 3000)
 
       _ ->
-        Process.sleep(3000)
-        IO.puts("no")
+        Process.sleep(5000)
+        IO.puts("no #{Timex.now("America/New_York") |> Timex.format!("%m/%d/%Y %I:%M%P", :strftime)}")
         Process.send(self(), :check_ntp, [:noconnect])
     end
   end

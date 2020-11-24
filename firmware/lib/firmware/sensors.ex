@@ -4,13 +4,13 @@ defmodule Firmware.Sensors do
   use GenServer
   use Timex
 
-  defmodule TimeBasedMeasurment do
+  defmodule TimeBasedMeasurement do
     defstruct temperature: 0.0, humidity: 0.0, pressure: 0.0, timestamp: nil
 
     def from_measurement(measurement) do
       {:ok, datetime} = DateTime.now("America/New_York")
 
-      %TimeBasedMeasurment{
+      %TimeBasedMeasurement{
         temperature: measurement.temperature,
         humidity: measurement.humidity,
         pressure: measurement.pressure,
@@ -94,7 +94,7 @@ defmodule Firmware.Sensors do
         later = Timex.subtract(datetime, Duration.from_hours(24))
 
         measurements =
-          [TimeBasedMeasurment.from_measurement(measurement) | state.measurements]
+          [TimeBasedMeasurement.from_measurement(measurement) | state.measurements]
           |> Enum.filter(fn m -> Timex.after?(m.timestamp, later) end)
 
         state

@@ -62,7 +62,7 @@ config :firmware, Firmware.Scheduler,
   timezone: "America/New_York",
   jobs: [
     heartbeat: [
-      schedule: "* * * * *",
+      schedule: "*/3 * * * *",
       task: {Firmware.Heartbeat, :perform, []}
     ]
     # Every minute
