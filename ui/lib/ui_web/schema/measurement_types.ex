@@ -1,7 +1,10 @@
 defmodule UiWeb.Schema.MeasurementTypes do
   use Absinthe.Schema.Notation
 
-  object :user do
-    field(:name, :string)
+  object :measurement do
+    field(:timestamp, :datetime)
+    field(:temperature, :float)
+    field(:humidity, :float)
+    field(:pressure, :float)
   end
 end

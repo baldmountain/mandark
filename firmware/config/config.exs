@@ -48,7 +48,7 @@ config :ui, UiWeb.Endpoint,
   root: Path.dirname(__DIR__),
   server: true,
   render_errors: [view: UiWeb.ErrorView, accepts: ~w(html json)],
-  pubsub: [name: Nerves.PubSub, adapter: Phoenix.PubSub.PG2],
+  pubsub_server: Firmware.PubSub,
   code_reloader: false
 
 config :phoenix, :json_library, Jason
