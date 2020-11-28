@@ -42,7 +42,6 @@ defmodule Firmware.Application do
        %{
          temperature: 0.0,
          humidity: 0.0,
-         pressure: 0.0,
          # List of time coded measurments. Only the last 24 hours.
          measurements: []
        }}

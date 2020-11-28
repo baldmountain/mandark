@@ -13,19 +13,17 @@
       <li><%= Timex.now("America/New_York") |> Timex.format!("%m/%d/%Y %I:%M%P", :strftime) %></li>
       <li>Temperature: <%= Float.round(measurements.temperature, 2) %> F˚</li>
       <li>Humidity: <%= Float.round(measurements.humidity, 2) %>%</li>
-      <li>Pressure: <%= Float.round(measurements.preasure, 2) %> inHg</li>
       <li>Air SVP: <%= Float.round(svp, 2) %> kPa</li>
       <li>Air VPD: <%= Float.round(svp * (1.0 - measurements.humidity / 100.0), 2) %></li>
     </ul>
   </article>
 </section>
 <section>
-  <h2>Temperature, Humidity, Pressure</h2>
+  <h2>Temperature, Humidity</h2>
   <div id="temp_chart" />
 </section>
 <section>
-  <h2>VPD Chart</h2>
-  <img src="<%= Routes.static_path(@conn, "/images/vpd-chart.png") %>" alt="VPD Chart"/>
+  <img src="<%= Routes.static_path(@conn, "/images/vpd-chart.jpg") %>" alt="VPD Chart"/>
 </section>
 <script type="text/javascript">
 (function() {
@@ -36,7 +34,10 @@
   }
 
   data.forEach(function(item) {
-    item.temperature = toFarenheit(item.temperature);
+    var temp = item.temperature;
+    item.spv = 610.78 * Math.exp(temp / (temp + 238.3) * 17.2694) / 1000.0;
+    item.vpd = item.spv * (1.0 - item.humidity / 100.0);
+    item.temperature = toFarenheit(temp);
     item.timestamp = new Date(item.timestamp);
   });
 

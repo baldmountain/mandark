@@ -64,6 +64,7 @@ defmodule Firmware.MixProject do
       {:quantum, "~> 3.3"},
       {:timex, "~> 3.6"},
       {:elixir_bme680, "~> 0.2.1"},
+      {:dht, "~> 0.1.1", only: [:dev, :prod]},
       {:tzdata, "~> 1.0"}
     ]
   end

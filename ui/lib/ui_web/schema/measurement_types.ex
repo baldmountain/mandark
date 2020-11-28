@@ -5,6 +5,5 @@ defmodule UiWeb.Schema.MeasurementTypes do
     field(:timestamp, :datetime)
     field(:temperature, :float)
     field(:humidity, :float)
-    field(:pressure, :float)
   end
 end

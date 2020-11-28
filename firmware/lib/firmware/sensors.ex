@@ -5,7 +5,7 @@ defmodule Firmware.Sensors do
   use Timex
 
   defmodule TimeBasedMeasurement do
-    defstruct temperature: 0.0, humidity: 0.0, pressure: 0.0, timestamp: nil
+    defstruct temperature: 0.0, humidity: 0.0, timestamp: nil
 
     def from_measurement(measurement) do
       {:ok, datetime} = DateTime.now("America/New_York")
@@ -13,7 +13,6 @@ defmodule Firmware.Sensors do
       %TimeBasedMeasurement{
         temperature: measurement.temperature,
         humidity: measurement.humidity,
-        pressure: measurement.pressure,
         timestamp: datetime
       }
     end
@@ -25,7 +24,12 @@ defmodule Firmware.Sensors do
 
   @impl true
   def init(state) do
-    start_bme280(state)
+    case Application.get_env(:firmware, :sensor) do
+      %{sensor: :bme280} -> start_bme280(state)
+
+      %{sensor: :dht11, gpio: gpio} ->
+        {:ok, Map.put(state, :sensor, :dht11) |> Map.put(:gpio, gpio)}
+    end
   end
 
   @impl true
@@ -52,7 +56,7 @@ defmodule Firmware.Sensors do
     try do
       case Bme280.start_link() do
         {:ok, bme280_pid} ->
-          {:ok, Map.put(state, :bme280_pid, bme280_pid)}
+          {:ok, Map.put(state, :bme280_pid, bme280_pid) |> Map.put(:sensor, :bme280)}
 
         err ->
           Logger.error("Error starting Bme280 #{inspect(err)}")
@@ -82,7 +86,25 @@ defmodule Firmware.Sensors do
     end
   end
 
-  defp check_temperature(%{bme280_pid: bme280_pid} = state) do
+  defp check_temperature(%{sensor: :dht11, gpio: gpio} = state) do
+    Logger.info("Checking temperature")
+
+    case DHT.read(gpio, :dht11) do
+      {:ok, measurement} ->
+        {:ok, datetime} = DateTime.now("America/New_York")
+        later = Timex.subtract(datetime, Duration.from_hours(24))
+
+        measurements =
+          [TimeBasedMeasurement.from_measurement(measurement) | state.measurements]
+          |> Enum.filter(fn m -> Timex.after?(m.timestamp, later) end)
+
+        state
+        |> Map.merge(Map.from_struct(measurement))
+        |> Map.put(:measurements, measurements)
+    end
+  end
+
+  defp check_temperature(%{sensor: :bme280, bme280_pid: bme280_pid} = state) do
     Logger.info("Checking temperature")
 
     case Bme280.measure(bme280_pid) do

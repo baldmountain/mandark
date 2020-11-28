@@ -5,7 +5,16 @@
 # is restricted to this project.
 use Mix.Config
 
-config :firmware, target: Mix.target()
+config :firmware,
+  target: Mix.target(),
+  sensor: %{
+    sensor: :bme280
+  }
+  # %{
+  #   sensor: :dht11
+  #   gpio: 6
+  # }
+
 
 # Customize non-Elixir parts of the firmware. See
 # https://hexdocs.pm/nerves/advanced-configuration.html for details.
