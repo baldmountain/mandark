@@ -8,7 +8,7 @@ mix deps.get
 mix deps.compile
 cd assets
 npm install
-npm rum deploy
+npm run deploy
 cd ..
 mix phx.digest
 mix test
