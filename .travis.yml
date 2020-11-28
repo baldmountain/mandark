@@ -2,7 +2,7 @@ language: elixir
 elixir:
   - '1.10'
 otp_release:
-  - '23'
+  - '23.1.4'
 dist: bionic
 env: MIX_ENV=test NERVES_TARGET=host
 install: mix local.rebar --force ; mix local.hex --force
