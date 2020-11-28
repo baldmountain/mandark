@@ -1,8 +1,6 @@
 language: elixir
 elixir:
-  - '1.10'
-otp_release:
-  - '20.2.2'
+  - '1.9'
 dist: focal
 env: MIX_ENV=test NERVES_TARGET=host
 install: mix local.rebar --force ; mix local.hex --force
