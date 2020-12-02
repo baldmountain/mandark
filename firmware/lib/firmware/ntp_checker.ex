@@ -19,9 +19,7 @@ defmodule Firmware.NtpChecker do
 
   @impl true
   def handle_info(:start_scheduler, state) do
-    IO.puts("time> #{Timex.now("America/New_York") |> Timex.format!("%m/%d/%Y %I:%M%P", :strftime)}")
     Firmware.StartupSupervisor.start_scheduler()
-    |> IO.inspect(label: "starting scheduler")
     {:noreply, state}
   end
 

@@ -10,8 +10,8 @@ config :firmware,
   sensor: %{
     sensor: :bme280
   }
-  # %{
-  #   sensor: :dht11
+  # sensor: %{
+  #   sensor: :dht22,
   #   gpio: 6
   # }
 
@@ -35,7 +35,7 @@ config :shoehorn,
 
 config :logger,
   backends: [RingLogger],
-  level: :info
+  level: :error
 
 # Import target specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.

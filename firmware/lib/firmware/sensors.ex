@@ -7,12 +7,12 @@ defmodule Firmware.Sensors do
   defmodule TimeBasedMeasurement do
     defstruct temperature: 0.0, humidity: 0.0, timestamp: nil
 
-    def from_measurement(measurement) do
+    def from_measurement(%{humidity: humidity, temperature: temperature}) do
       {:ok, datetime} = DateTime.now("America/New_York")
 
       %TimeBasedMeasurement{
-        temperature: measurement.temperature,
-        humidity: measurement.humidity,
+        temperature: temperature,
+        humidity: humidity,
         timestamp: datetime
       }
     end
@@ -25,10 +25,14 @@ defmodule Firmware.Sensors do
   @impl true
   def init(state) do
     case Application.get_env(:firmware, :sensor) do
-      %{sensor: :bme280} -> start_bme280(state)
+      %{sensor: :bme280} ->
+        start_bme280(state)
 
       %{sensor: :dht11, gpio: gpio} ->
         {:ok, Map.put(state, :sensor, :dht11) |> Map.put(:gpio, gpio)}
+
+      %{sensor: :dht22, gpio: gpio} ->
+        {:ok, Map.put(state, :sensor, :dht22) |> Map.put(:gpio, gpio)}
     end
   end
 
@@ -99,7 +103,25 @@ defmodule Firmware.Sensors do
           |> Enum.filter(fn m -> Timex.after?(m.timestamp, later) end)
 
         state
-        |> Map.merge(Map.from_struct(measurement))
+        |> Map.merge(measurement)
+        |> Map.put(:measurements, measurements)
+    end
+  end
+
+  defp check_temperature(%{sensor: :dht22, gpio: gpio} = state) do
+    Logger.info("Checking temperature")
+
+    case DHT.read(gpio, :dht22) do
+      {:ok, measurement} ->
+        {:ok, datetime} = DateTime.now("America/New_York")
+        later = Timex.subtract(datetime, Duration.from_hours(24))
+
+        measurements =
+          [TimeBasedMeasurement.from_measurement(measurement) | state.measurements]
+          |> Enum.filter(fn m -> Timex.after?(m.timestamp, later) end)
+
+        state
+        |> Map.merge(measurement)
         |> Map.put(:measurements, measurements)
     end
   end

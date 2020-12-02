@@ -4,79 +4,79 @@ defmodule UiWeb.PageView do
 
   use UiWeb, :view
 
-  defmodule TimeBasedMeasurement do
-    defstruct temperature: 0.0, humidity: 0.0, timestamp: nil
+  # defmodule TimeBasedMeasurement do
+  #   defstruct temperature: 0.0, humidity: 0.0, timestamp: nil
 
-    def from_measurement(measurement, add \\ 0)
-    def from_measurement(measurement, add) do
-      {:ok, datetime} = DateTime.now("Etc/UTC")
+  #   def from_measurement(measurement, add \\ 0)
+  #   def from_measurement(measurement, add) do
+  #     {:ok, datetime} = DateTime.now("Etc/UTC")
 
-      case add do
-        0 ->
-          %TimeBasedMeasurement{
-            temperature: measurement.temperature,
-            humidity: measurement.humidity,
-            timestamp: datetime
-          }
+  #     case add do
+  #       0 ->
+  #         %TimeBasedMeasurement{
+  #           temperature: measurement.temperature,
+  #           humidity: measurement.humidity,
+  #           timestamp: datetime
+  #         }
 
-        mins ->
-          %TimeBasedMeasurement{
-            temperature: measurement.temperature,
-            humidity: measurement.humidity,
-            timestamp: Timex.add(datetime, Duration.from_minutes(mins))
-          }
-      end
-    end
-  end
+  #       mins ->
+  #         %TimeBasedMeasurement{
+  #           temperature: measurement.temperature,
+  #           humidity: measurement.humidity,
+  #           timestamp: Timex.add(datetime, Duration.from_minutes(mins))
+  #         }
+  #     end
+  #   end
+  # end
 
   defp get_sensor_data() do
-    # GenServer.call(Firmware.Sensors, :get_sensor_data)
-    %{
-      temperature: 24.0,
-      humidity: 38.5,
-      measurements: [
-        TimeBasedMeasurement.from_measurement(%{
-          temperature: 24.0,
-          humidity: 38.5
-        }),
-        TimeBasedMeasurement.from_measurement(%{
-          temperature: 24.3,
-          humidity: 38.5
-        }, 3),
-        TimeBasedMeasurement.from_measurement(%{
-          temperature: 24.3,
-          humidity: 38.5
-        }, 6),
-        TimeBasedMeasurement.from_measurement(%{
-          temperature: 24.3,
-          humidity: 38.5
-        }, 9),
-        TimeBasedMeasurement.from_measurement(%{
-          temperature: 24.3,
-          humidity: 38.5
-        }, 12),
-        TimeBasedMeasurement.from_measurement(%{
-          temperature: 24.3,
-          humidity: 38.5
-        }, 15),
-        TimeBasedMeasurement.from_measurement(%{
-          temperature: 24.3,
-          humidity: 38.5
-        }, 18),
-        TimeBasedMeasurement.from_measurement(%{
-          temperature: 24.3,
-          humidity: 38.5
-        }, 21),
-        TimeBasedMeasurement.from_measurement(%{
-          temperature: 24.3,
-          humidity: 38.5
-        }, 24),
-        TimeBasedMeasurement.from_measurement(%{
-          temperature: 24.3,
-          humidity: 38.5
-        }, 27),
-      ]
-    }
+    GenServer.call(Firmware.Sensors, :get_sensor_data)
+    # %{
+    #   temperature: 24.0,
+    #   humidity: 38.5,
+    #   measurements: [
+    #     TimeBasedMeasurement.from_measurement(%{
+    #       temperature: 24.0,
+    #       humidity: 38.5
+    #     }),
+    #     TimeBasedMeasurement.from_measurement(%{
+    #       temperature: 24.3,
+    #       humidity: 38.5
+    #     }, 3),
+    #     TimeBasedMeasurement.from_measurement(%{
+    #       temperature: 24.3,
+    #       humidity: 38.5
+    #     }, 6),
+    #     TimeBasedMeasurement.from_measurement(%{
+    #       temperature: 24.3,
+    #       humidity: 38.5
+    #     }, 9),
+    #     TimeBasedMeasurement.from_measurement(%{
+    #       temperature: 24.3,
+    #       humidity: 38.5
+    #     }, 12),
+    #     TimeBasedMeasurement.from_measurement(%{
+    #       temperature: 24.3,
+    #       humidity: 38.5
+    #     }, 15),
+    #     TimeBasedMeasurement.from_measurement(%{
+    #       temperature: 24.3,
+    #       humidity: 38.5
+    #     }, 18),
+    #     TimeBasedMeasurement.from_measurement(%{
+    #       temperature: 24.3,
+    #       humidity: 38.5
+    #     }, 21),
+    #     TimeBasedMeasurement.from_measurement(%{
+    #       temperature: 24.3,
+    #       humidity: 38.5
+    #     }, 24),
+    #     TimeBasedMeasurement.from_measurement(%{
+    #       temperature: 24.3,
+    #       humidity: 38.5
+    #     }, 27),
+    #   ]
+    # }
   end
 
   def get_current_measurement() do
