@@ -58,7 +58,8 @@ config :ui, UiWeb.Endpoint,
   server: true,
   render_errors: [view: UiWeb.ErrorView, accepts: ~w(html json)],
   pubsub_server: Firmware.PubSub,
-  code_reloader: false
+  code_reloader: false,
+  load_from_system_env: false
 
 config :phoenix, :json_library, Jason
 
